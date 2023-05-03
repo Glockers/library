@@ -11,7 +11,7 @@ const Container = styled(Layout)<{ headerheight: number }>`
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: calc(100vh - ${({ headerheight }) => `${headerheight}px`});
+  min-height: calc(100vh - ${({ headerheight }) => `${headerheight}px`});
   overflow-x: hidden;
   background-color: transparent;
 `;

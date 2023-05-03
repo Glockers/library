@@ -1,5 +1,4 @@
-import dayjs from "dayjs";
-import { createContext, useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { createContainer } from "unstated-next";
 import {
   EUserRole,
@@ -8,6 +7,7 @@ import {
   useLoginMutation,
 } from "../api/mutations";
 import { toast } from "react-toastify";
+import { useGetMeQuery } from "../api/queries";
 
 export type IAuthContextResults = ReturnType<typeof useAuthContext>;
 
@@ -45,7 +45,7 @@ interface IAuthState {
 }
 
 export const getToken = (): IGetTokenResults => {
-  return Object.keys(EStorageKeys).reduce<IGetTokenResults>((acc, key) => {
+  return Object.values(EStorageKeys).reduce<IGetTokenResults>((acc, key) => {
     return {
       ...acc,
       [key]: localStorage.getItem(key) || undefined,
@@ -54,11 +54,16 @@ export const getToken = (): IGetTokenResults => {
 };
 
 const useAuth = () => {
-  const { isLoading, error, login } = useLoginMutation();
   const [state, setState] = useState<IAuthState>({
     isAuthorized: false,
     isLoading: false,
   });
+  const { isLoading, login } = useLoginMutation();
+  const {
+    data,
+    isLoading: isMeLoading,
+    error,
+  } = useGetMeQuery({ enabled: state.isAuthorized });
 
   const setLoginData = (data: ILoginResults): void => {
     setState((prev) => ({ ...prev, isLoading: true, ...data }));
@@ -66,7 +71,7 @@ const useAuth = () => {
     localStorage.setItem(EStorageKeys.REFRESH_TOKEN, data.refreshToken);
     localStorage.setItem(EStorageKeys.TOKEN, data.authToken);
     localStorage.setItem(EStorageKeys.ROLE, data.role);
-    setState((prev) => ({ ...prev, isLoading: false }));
+    setState((prev) => ({ ...prev, isLoading: false, isAuthorized: true }));
   };
 
   const logIn = (
@@ -83,15 +88,46 @@ const useAuth = () => {
     });
   };
 
+  const logout = (): void => {
+    setState((prev) => ({ ...prev, isLoading: true }));
+    localStorage.removeItem(EStorageKeys.EXPIRES_IN);
+    localStorage.removeItem(EStorageKeys.REFRESH_TOKEN);
+    localStorage.removeItem(EStorageKeys.TOKEN);
+    localStorage.removeItem(EStorageKeys.ROLE);
+    setState(() => ({ isAuthorized: false, isLoading: false }));
+  };
+
+  useEffect(() => {
+    console.log(data);
+    if (data) {
+      setState((prev) => ({
+        ...prev,
+        isAuthorized: true,
+        isLoading: false,
+        role: data.role,
+        user: data,
+      }));
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (error?.status === 401) {
+      logout();
+    }
+  }, [error]);
+
   useEffect(() => {
     const data = getToken();
-    setState((prev) => ({ ...prev, ...data }));
+    if (data.authToken) {
+      setState((prev) => ({ ...prev, ...data, isAuthorized: true }));
+    }
   }, []);
 
   return {
     ...state,
-    isLoading: state.isLoading || isLoading,
+    isLoading: state.isLoading || isLoading || isMeLoading,
     logIn,
+    logout,
   };
 };
 

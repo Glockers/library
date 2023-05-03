@@ -1,19 +1,24 @@
 import { Header } from "antd/es/layout/layout";
 import { ReactElement } from "react";
 import styled from "styled-components";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Button } from "antd";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Button, Image, Skeleton } from "antd";
 
 import { theme } from "../styles/constants";
-import logo from "../assets/pngtree-book.png";
 import { EAppRoutes } from "../routes/router.config";
+import { useAuthContext } from "../providers";
 
 export const HEADER_HEIGHT = 60;
 
 const Container = styled(Header)<{ height: number }>`
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: ${({ height }) => height};
   background-color: ${theme.colors.primary};
   padding: 0;
+  z-index: 10;
 `;
 
 const BaseWrapper = styled.div`
@@ -32,8 +37,14 @@ const Wrapper = styled.div`
   justify-content: space-between;
 `;
 
-const Logo = styled.img`
-  height: 48px;
+const Avatar = styled.img`
+  object-fit: cover;
+  width: 32px;
+  height: 32px;
+  border-radius: 100%;
+  margin-right: 16px;
+  background: #ffffff;
+  cursor: pointer;
 `;
 
 const Text = styled.span<{ active: boolean }>`
@@ -43,26 +54,43 @@ const Text = styled.span<{ active: boolean }>`
   font-weight: ${({ active }) => (active ? 600 : 400)};
 `;
 
+const Name = styled.span`
+  font-size: 14px;
+  color: #ffffff;
+  margin-right: 8px;
+`;
+
 export const AppHeader = (): ReactElement => {
-  const { pathname } = useLocation();
+  const { isAuthorized, user, logout } = useAuthContext();
   const navigate = useNavigate();
 
   return (
     <Container style={{ height: HEADER_HEIGHT }} height={HEADER_HEIGHT}>
       <BaseWrapper>
         <Wrapper>
-          <Link to="/">
-            <Logo src={logo} alt="" />
-          </Link>
-          <Link to="/">
-            <Text active={pathname === EAppRoutes.HOME}>Книги</Text>
-          </Link>
+          <Text active>Book shelf company</Text>
         </Wrapper>
         <Wrapper>
-          {pathname !== EAppRoutes.LOG_IN && (
+          {!isAuthorized && (
             <Button type="primary" onClick={() => navigate(EAppRoutes.LOG_IN)}>
               Войти
             </Button>
+          )}
+
+          {isAuthorized && (
+            <>
+              <Name>{user?.firstName}</Name>
+              <Avatar src={user?.image} alt="" />
+              <Button
+                type="dashed"
+                onClick={() => {
+                  logout();
+                  navigate(EAppRoutes.HOME);
+                }}
+              >
+                Выйти
+              </Button>
+            </>
           )}
         </Wrapper>
       </BaseWrapper>

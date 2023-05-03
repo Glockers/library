@@ -1,6 +1,6 @@
 export const theme = {
   colors: {
-    primary: "#004e86",
+    primary: "#001529",
   },
   maxWidth: 1440,
 };
