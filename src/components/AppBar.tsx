@@ -14,8 +14,9 @@ import type { MenuProps } from "antd";
 import { EAppRoutes } from "../routes/router.config";
 import { useAuthContext } from "../providers";
 import logo from "../assets/pngtree-book.png";
+import { EUserRole } from "../api/mutations";
 
-type MenuItem = Required<MenuProps>["items"][number];
+type MenuItem = Required<MenuProps>["items"][number] & { permisson?: `${EUserRole}`[] };
 
 const { Header, Sider } = Layout;
 
@@ -38,11 +39,17 @@ const Logo = styled.img`
 // getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
 // getItem('Files', '9', <FileOutlined />),
 
-const withCondition = <T extends any[]>(condition: boolean, results: T) =>
-  condition ? results : [];
+const withCondition = <T extends MenuItem[]>(condition: boolean, role: `${EUserRole}` | undefined, results: T) => {
+  return results.filter((element) => {
+    if (element?.permisson && role !== undefined && element.permisson.includes(role)) {
+      return results
+    }
+  })
+  // return condition ? results : [];
+}
 
 export const AppBar = (): ReactElement => {
-  const { isAuthorized } = useAuthContext();
+  const { isAuthorized, role } = useAuthContext();
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
 
@@ -60,23 +67,34 @@ export const AppBar = (): ReactElement => {
         label: "Пункт выдачи",
         onClick: () => navigate(EAppRoutes.MAP),
       },
-      ...withCondition(isAuthorized, [
+      ...withCondition(isAuthorized, role, [
         {
           key: EAppRoutes.CART,
           icon: <ShopFilled />,
           label: "Корзина",
+          permisson: [EUserRole.ADMIN, EUserRole.CLIENT],
           onClick: () => navigate(EAppRoutes.CART),
         },
         {
           key: EAppRoutes.PROFILE,
           icon: <UserOutlined />,
           label: "Профиль",
+          permisson: [EUserRole.ADMIN, EUserRole.CLIENT],
+
           onClick: () => navigate(EAppRoutes.PROFILE),
         },
         {
           key: EAppRoutes.PAYMENTS,
           icon: <MoneyCollectFilled />,
           label: "Оплата",
+          permisson: [EUserRole.CLIENT, EUserRole.ADMIN],
+          onClick: () => navigate(EAppRoutes.PAYMENTS),
+        },
+        {
+          key: EAppRoutes.PAYMENTS,
+          icon: <MoneyCollectFilled />,
+          label: "Оплата",
+          permisson: [EUserRole.CLIENT, EUserRole.ADMIN],
           onClick: () => navigate(EAppRoutes.PAYMENTS),
         },
       ]),
