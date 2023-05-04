@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 
-import { Home, Login, NotFound, SignUp } from "../pages";
+import { Home, Login, NotFound, Profile, SignUp, Contacts, Payments, Cart } from "../pages";
 
 export enum EPermission {
   AUTH_NO_AUTH = "no_auth",
@@ -12,8 +12,10 @@ export enum EAppRoutes {
   HOME = "/",
   PROFILE = "/profile",
   CART = '/cart',
+  MAP = '/map',
   AUTHOR = '/author/:authorId',
   LOG_IN = "/login",
+  PAYMENTS = "/payments",
   SIGN_UP = "/sign-up",
 }
 
@@ -28,6 +30,22 @@ export const routes: TRoutes = {
   [EAppRoutes.HOME]: {
     element: <Home />,
     permissions: [],
+  },
+  [EAppRoutes.MAP]: {
+    element: <Contacts />,
+    permissions: [],
+  },
+  [EAppRoutes.CART]: {
+    element: <Cart />,
+    permissions: [],
+  },
+  [EAppRoutes.PROFILE]: {
+    element: <Profile />,
+    permissions: [EPermission.AUTH_REQUIRED],
+  },
+  [EAppRoutes.PAYMENTS]: {
+    element: <Payments />,
+    permissions: [EPermission.AUTH_REQUIRED],
   },
   [EAppRoutes.LOG_IN]: {
     element: <Login />,

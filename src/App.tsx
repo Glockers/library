@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
 
 import { Routes } from "./routes/Router";
-import { AuthContextProvider } from "./providers";
+import { AuthContextProvider, CartContextProvider } from "./providers";
 
 import "antd/dist/reset.css";
 
@@ -14,7 +14,9 @@ const App = (): ReactElement => {
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <AuthContextProvider>
-          <Routes />
+          <CartContextProvider>
+            <Routes />
+          </CartContextProvider>
         </AuthContextProvider>
       </QueryClientProvider>
     </BrowserRouter>

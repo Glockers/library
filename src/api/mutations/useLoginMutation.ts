@@ -42,7 +42,6 @@ export const useLoginMutation = () => {
     mutationFn,
   });
 
-  console.log(error?.message);
   return {
     data,
     isLoading,

@@ -9,6 +9,7 @@ import { AxiosError } from "axios";
 export interface IGetMeResults {
   email: string;
   firstName: string;
+  balance: number;
   id: string;
   image?: string;
   lastName: string;
@@ -18,6 +19,18 @@ export interface IGetMeResults {
 
 interface IUseGetMeQueryProps {
   enabled: boolean;
+}
+
+export const user = {
+  email: "test@email.com",
+  firstName: "Name",
+  id: "asdasd21323rf43rtg",
+  image:
+    "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=2000",
+  lastName: "LastName",
+  phoneNumber: "+375441234567",
+  balance: 20.20,
+  role: EUserRole.CLIENT,
 }
 
 const queryFn = async (): Promise<Required<IGetMeResults>> => {
@@ -30,16 +43,7 @@ const queryFn = async (): Promise<Required<IGetMeResults>> => {
   // };
   return new Promise((res) => {
     setTimeout(() => {
-      res({
-        email: "test@email.com",
-        firstName: "Name",
-        id: "asdasd21323rf43rtg",
-        image:
-          "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=2000",
-        lastName: "LastName",
-        phoneNumber: "+375441234567",
-        role: EUserRole.CLIENT,
-      });
+      res(user);
     }, 2000);
   });
 };

@@ -60,6 +60,13 @@ const Name = styled.span`
   margin-right: 8px;
 `;
 
+const Mony = styled.span`
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-right: 16px;
+`;
+
 export const AppHeader = (): ReactElement => {
   const { isAuthorized, user, logout } = useAuthContext();
   const navigate = useNavigate();
@@ -79,8 +86,13 @@ export const AppHeader = (): ReactElement => {
 
           {isAuthorized && (
             <>
+            <Mony>{user?.balance} BYN</Mony>
               <Name>{user?.firstName}</Name>
-              <Avatar src={user?.image} alt="" />
+              <Avatar
+                src={user?.image}
+                alt=""
+                onClick={() => navigate(EAppRoutes.PROFILE)}
+              />
               <Button
                 type="dashed"
                 onClick={() => {

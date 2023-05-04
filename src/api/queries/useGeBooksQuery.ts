@@ -12,6 +12,7 @@ export interface IUseGeBooksResults {
   image: string;
   name: string;
   description: string;
+  cost: number;
   id: string;
   address: {
     id: string;
@@ -26,17 +27,24 @@ export interface IUseGeBooksResults {
   };
 }
 
-interface IUseGetMeQueryProps {
-  search?: string;
+export enum ESortType {
+  MONY_HIGHT = "monyHight",
+  MONY_LOW = "monyLow",
 }
 
-const data = Array.from({ length: 40 }, () => ({
+interface IUseGetMeQueryProps {
+  search?: string;
+  sort?: ESortType;
+}
+
+export const books = Array.from({ length: 40 }, () => ({
   name: faker.music.songName(),
   address: {
     id: Math.random().toString(),
     addressLine1: "г. Минск, ул. Темерязева 101а",
     city: "Минск",
   },
+  cost: parseFloat(faker.finance.amount(5, 60)),
   author: {
     id: Math.random().toString(),
     name: faker.name.fullName(),
@@ -44,11 +52,13 @@ const data = Array.from({ length: 40 }, () => ({
   },
   description: faker.commerce.productDescription(),
   id: Math.random().toString(),
-  image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwjPHSBopmW0fcsPtI_8TjPH_GNiljnOINSg&usqp=CAU',
+  image:
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwjPHSBopmW0fcsPtI_8TjPH_GNiljnOINSg&usqp=CAU",
 }));
 
 const queryFn = async ({
   search,
+  sort,
 }: IUseGetMeQueryProps): Promise<IUseGeBooksResults[]> => {
   // const response = await request().get<IUseGeBooksResults[]>("/public/books", {
   //   params: { search },
@@ -57,10 +67,17 @@ const queryFn = async ({
   // return response.data;
   return new Promise((res) => {
     setTimeout(() => {
-      console.log(data.filter(({ name }) => search && name.includes(search)));
-      res(
-        data.filter(({ name }) => (search && name.includes(search)) || !search)
+      const items = books.filter(
+        ({ name }) => (search && name.includes(search)) || !search
       );
+      if (sort) {
+        return res(
+          items.sort(({ cost }, { cost: cost1 }) =>
+            sort === ESortType.MONY_HIGHT ? cost - cost1 : cost1 - cost
+          )
+        );
+      }
+      res(items);
     }, 2000);
   });
 };

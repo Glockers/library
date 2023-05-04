@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Image, Input } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,35 +7,45 @@ import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 
 import { PageLayout } from "../../layouts";
 import { EAppRoutes } from "../../routes/router.config";
-import { useSignUpMutation } from "../../api/mutations";
+import { useAccountMutation, useSignUpMutation } from "../../api/mutations";
 
-import * as S from "./SignUp.styles";
+import * as S from "./Profile.styles";
 import { z } from "zod";
 import { toast } from "react-toastify";
+import { useAuthContext } from "../../providers";
 
 type TFormFields = z.infer<typeof validation>;
 
 const validation = z.object({
   email: z.string().email(),
-  password: z.string().min(6),
   firstName: z.string().min(2),
   lastName: z.string().min(2),
   phoneNumber: z.string().optional(),
 });
 
-export const SignUp = (): ReactElement => {
+export const Profile = (): ReactElement => {
   const [form] = Form.useForm();
+  const { user, updateState, logout } = useAuthContext();
   const navigate = useNavigate();
-  const { signUp, isLoading } = useSignUpMutation();
+  const { remove, update, isLoading } = useAccountMutation();
   const { formState, control, handleSubmit } = useForm<TFormFields>({
     resolver: zodResolver(validation),
+    defaultValues: user,
   });
 
   const handleForm = (data: TFormFields): void => {
-    signUp(data, {
+    update(data, {
       onSuccess() {
-        toast.success("Вы успешно зарегистрировались");
-        navigate(EAppRoutes.LOG_IN);
+        updateState((prev) => ({
+          ...prev,
+          user: prev.user
+            ? {
+                ...prev.user,
+                ...data,
+              }
+            : undefined,
+        }));
+        toast.success("Вы успешно обновили данные");
       },
       onError() {
         toast.error("Упс, что-то пошло не так");
@@ -43,6 +53,14 @@ export const SignUp = (): ReactElement => {
     });
   };
 
+  const removeAccount = () => {
+    remove(undefined, {
+      onSuccess() {
+        logout();
+        navigate(EAppRoutes.HOME);
+      },
+    });
+  };
   return (
     <PageLayout>
       <S.LoginForm
@@ -50,6 +68,15 @@ export const SignUp = (): ReactElement => {
         layout="vertical"
         onSubmitCapture={handleSubmit(handleForm, console.log)}
       >
+        <S.AvatarWrapper>
+          <S.Avatar
+            style={{ marginBottom: 32 }}
+            width={160}
+            height={160}
+            src={user?.image}
+          />
+        </S.AvatarWrapper>
+
         <Form.Item
           label="E-mail"
           name="email"
@@ -111,29 +138,6 @@ export const SignUp = (): ReactElement => {
           />
         </Form.Item>
         <Form.Item
-          label="Пароль"
-          name="password"
-          style={{ marginBottom: 4 }}
-          required
-          validateStatus={!!formState.errors.password ? "error" : "validating"}
-        >
-          <Controller
-            name="password"
-            control={control}
-            render={({ field: { value, onChange } }) => (
-              <Input.Password
-                type="password"
-                placeholder="********"
-                iconRender={(visible) =>
-                  visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-                }
-                onChange={onChange}
-                value={value}
-              />
-            )}
-          />
-        </Form.Item>
-        <Form.Item
           label="Номер телефона"
           name="phoneNumber"
           style={{ marginBottom: 8 }}
@@ -154,11 +158,7 @@ export const SignUp = (): ReactElement => {
             )}
           />
         </Form.Item>
-        <div>
-          <S.Text>
-            У вас уже есть аккаунта? <Link to={EAppRoutes.LOG_IN}>Войти</Link>
-          </S.Text>
-        </div>
+
         <Form.Item>
           <Button
             htmlType="submit"
@@ -166,7 +166,17 @@ export const SignUp = (): ReactElement => {
             disabled={isLoading}
             type="primary"
           >
-            Зарегистрироваться
+            Сохранить
+          </Button>
+          <Button
+            htmlType="button"
+            danger={true}
+            style={{ marginTop: "16px", marginLeft: 12 }}
+            disabled={isLoading}
+            onClick={removeAccount}
+            type="primary"
+          >
+            Удалить аккаунт
           </Button>
         </Form.Item>
       </S.LoginForm>

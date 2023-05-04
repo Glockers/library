@@ -7,7 +7,9 @@ import {
   useLoginMutation,
 } from "../api/mutations";
 import { toast } from "react-toastify";
-import { useGetMeQuery } from "../api/queries";
+import { IGetMeResults, useGetMeQuery } from "../api/queries";
+import { useNavigate } from "react-router-dom";
+import { EAppRoutes } from "../routes/router.config";
 
 export type IAuthContextResults = ReturnType<typeof useAuthContext>;
 
@@ -25,20 +27,12 @@ interface IGetTokenResults {
   [EStorageKeys.ROLE]?: `${EUserRole}`;
 }
 
-interface IUserType {
-  email: string;
-  firstName: string;
-  id: string;
-  image?: string;
-  lastName: string;
-  phoneNumber?: string;
-  role: EUserRole;
-}
+
 
 interface IAuthState {
   isAuthorized: boolean;
   isLoading: boolean;
-  user?: IUserType;
+  user?: IGetMeResults;
   [EStorageKeys.REFRESH_TOKEN]?: string;
   [EStorageKeys.TOKEN]?: string;
   [EStorageKeys.ROLE]?: `${EUserRole}`;
@@ -54,6 +48,7 @@ export const getToken = (): IGetTokenResults => {
 };
 
 const useAuth = () => {
+  const nav = useNavigate();
   const [state, setState] = useState<IAuthState>({
     isAuthorized: false,
     isLoading: false,
@@ -72,6 +67,7 @@ const useAuth = () => {
     localStorage.setItem(EStorageKeys.TOKEN, data.authToken);
     localStorage.setItem(EStorageKeys.ROLE, data.role);
     setState((prev) => ({ ...prev, isLoading: false, isAuthorized: true }));
+    nav(EAppRoutes.HOME);
   };
 
   const logIn = (
@@ -82,7 +78,8 @@ const useAuth = () => {
       ...config,
       onSuccess(data, variables, context) {
         setLoginData(data);
-        toast("Вы успешно вошли в аккаунт");
+        nav(EAppRoutes.HOME);
+        toast.success("Вы успешно вошли в аккаунт");
         config?.onSuccess && config?.onSuccess(data, variables, context);
       },
     });
@@ -98,7 +95,6 @@ const useAuth = () => {
   };
 
   useEffect(() => {
-    console.log(data);
     if (data) {
       setState((prev) => ({
         ...prev,
@@ -126,6 +122,7 @@ const useAuth = () => {
   return {
     ...state,
     isLoading: state.isLoading || isLoading || isMeLoading,
+    updateState: setState,
     logIn,
     logout,
   };

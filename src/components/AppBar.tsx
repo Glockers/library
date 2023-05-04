@@ -1,7 +1,13 @@
 import { ReactElement, useMemo, useState } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
-import { PieChartOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  PieChartOutlined,
+  UserOutlined,
+  FileMarkdownFilled,
+  ShopFilled,
+  MoneyCollectFilled
+} from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 import type { MenuProps } from "antd";
 
@@ -46,10 +52,33 @@ export const AppBar = (): ReactElement => {
         key: EAppRoutes.HOME,
         icon: <PieChartOutlined />,
         label: "Каталог",
-        onClick: () => navigate(EAppRoutes.LOG_IN),
+        onClick: () => navigate(EAppRoutes.HOME),
+      },
+      {
+        key: EAppRoutes.MAP,
+        icon: <FileMarkdownFilled />,
+        label: "Пункт выдачи",
+        onClick: () => navigate(EAppRoutes.MAP),
       },
       ...withCondition(isAuthorized, [
-        { key: EAppRoutes.LOG_IN, icon: <UserOutlined />, label: "Профиль" },
+        {
+          key: EAppRoutes.CART,
+          icon: <ShopFilled />,
+          label: "Корзина",
+          onClick: () => navigate(EAppRoutes.CART),
+        },
+        {
+          key: EAppRoutes.PROFILE,
+          icon: <UserOutlined />,
+          label: "Профиль",
+          onClick: () => navigate(EAppRoutes.PROFILE),
+        },
+        {
+          key: EAppRoutes.PAYMENTS,
+          icon: <MoneyCollectFilled />,
+          label: "Оплата",
+          onClick: () => navigate(EAppRoutes.PAYMENTS),
+        },
       ]),
     ],
     [isAuthorized]
