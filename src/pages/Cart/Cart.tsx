@@ -107,7 +107,7 @@ export const Cart = (): ReactElement => {
           )}
         />
       </Wrapper>
-      {items?.length && (
+      {!!items?.length && (
         <BottonButtons>
           <Button type="primary" onClick={pay}>
             Оплатить

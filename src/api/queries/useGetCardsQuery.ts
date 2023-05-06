@@ -6,6 +6,8 @@ import avatar from "../../assets/default-avatar.png";
 import request from "../utils";
 import { AxiosError } from "axios";
 import { faker } from "@faker-js/faker";
+import { addToStorage, getFromStorage } from "./storage.config";
+import { useEffect } from "react";
 
 export interface IGetCardsResults {
   items: Array<IPaymentCardResults>;
@@ -47,9 +49,19 @@ const queryFn = async (): Promise<IGetCardsResults> => {
   //   image: response.data.image || avatar,
   //   phoneNumber: "",
   // };
+  const data = getFromStorage<IGetCardsResults>("cards");
+
+  if (!data) {
+    addToStorage("cards", { items });
+    return new Promise((res) => {
+      setTimeout(() => {
+        res({ items });
+      }, 2000);
+    });
+  }
   return new Promise((res) => {
     setTimeout(() => {
-      res({ items });
+      res(data);
     }, 2000);
   });
 };
@@ -67,6 +79,12 @@ export const useGetCardsQuery = ({ enabled }: IUseGetCartQueryProps) => {
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   });
+
+  useEffect(() => {
+    if (data) {
+      addToStorage("cards", data);
+    }
+  }, [data]);
 
   return { data, isLoading: isLoading && enabled, error };
 };

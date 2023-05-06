@@ -18,6 +18,7 @@ const mutationFn = async (data: IPayProps): Promise<IPayResults> => {
     id: Math.random().toString(),
     items: data.items.map(({ bookId }) => ({ bookId, id: bookId })),
     status: EOrderStatus.IN_PROGRESS,
+    createdAt: new Date(),
   };
 };
 

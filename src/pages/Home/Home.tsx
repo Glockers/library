@@ -1,6 +1,6 @@
 import { ReactElement, useState } from "react";
 import styled from "styled-components";
-import { Avatar, Button, Card, Input, Select, Spin } from "antd";
+import { Avatar, Button, Card, Image, Input, Select, Spin } from "antd";
 
 import { PageLayout } from "../../layouts";
 import {
@@ -48,7 +48,14 @@ const BookCard = ({
   return (
     <Card
       style={{ width: 300, paddingBottom: 36 }}
-      cover={<img alt="example" src={book.image} />}
+      cover={
+        <Image
+          alt="example"
+          src={book.image}
+          style={{ objectFit: "cover" }}
+          height={200}
+        />
+      }
     >
       <Meta
         style={{ marginBottom: 16 }}

@@ -21,6 +21,7 @@ const mutationFn = async (
     id: Math.random().toString(),
     items: books.slice(0, 5).map(({ id }) => ({ bookId: id, id })),
     status: EOrderStatus.IN_PROGRESS,
+    createdAt: new Date(),
   };
 };
 

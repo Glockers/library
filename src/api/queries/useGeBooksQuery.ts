@@ -7,6 +7,7 @@ import { EUserRole } from "../mutations";
 import avatar from "../../assets/default-avatar.png";
 import request from "../utils";
 import { AxiosError } from "axios";
+import { generatedBooks } from "./books";
 
 export interface IUseGeBooksResults {
   image: string;
@@ -37,24 +38,7 @@ interface IUseGetMeQueryProps {
   sort?: ESortType;
 }
 
-export const books = Array.from({ length: 40 }, () => ({
-  name: faker.music.songName(),
-  address: {
-    id: Math.random().toString(),
-    addressLine1: "г. Минск, ул. Темерязева 101а",
-    city: "Минск",
-  },
-  cost: parseFloat(faker.finance.amount(5, 60)),
-  author: {
-    id: Math.random().toString(),
-    name: faker.name.fullName(),
-    image: faker.image.avatar(),
-  },
-  description: faker.commerce.productDescription(),
-  id: Math.random().toString(),
-  image:
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwjPHSBopmW0fcsPtI_8TjPH_GNiljnOINSg&usqp=CAU",
-}));
+export const books = generatedBooks;
 
 const queryFn = async ({
   search,

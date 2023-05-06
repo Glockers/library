@@ -63,16 +63,16 @@ export const AppBar = (): ReactElement => {
       {
         key: EAppRoutes.MAP,
         icon: <FileMarkdownFilled />,
-        label: "Пункт выдачи",
+        label: "Пункты выдачи",
         onClick: () => navigate(EAppRoutes.MAP),
       },
+      {
+        key: EAppRoutes.CART,
+        icon: <ShopFilled />,
+        label: "Корзина",
+        onClick: () => navigate(EAppRoutes.CART),
+      },
       ...withCondition(isAuthorized, [
-        {
-          key: EAppRoutes.CART,
-          icon: <ShopFilled />,
-          label: "Корзина",
-          onClick: () => navigate(EAppRoutes.CART),
-        },
         {
           key: EAppRoutes.ORDERS,
           icon: <OrderedListOutlined />,

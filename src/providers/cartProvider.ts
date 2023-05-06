@@ -77,7 +77,7 @@ const useCart = () => {
     if (items && items.length) {
       setState((prev) => ({
         ...prev,
-        cartItems: [...prev.cartItems, ...JSON.parse(items)].filter(
+        cartItems: [...prev.cartItems, ...JSON.parse(items).items].filter(
           (item, pos, arr) => {
             return arr.findIndex((el) => el.bookId === item.bookId) === pos;
           }
@@ -88,7 +88,7 @@ const useCart = () => {
 
   useEffect(() => {
     if (state.cartItems.length) {
-      localStorage.setItem("cart", JSON.stringify(state.cartItems));
+      localStorage.setItem("cart", JSON.stringify({ items: state.cartItems }));
     } else {
       localStorage.removeItem("cart");
     }
