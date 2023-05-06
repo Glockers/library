@@ -8,7 +8,7 @@ export interface IEditableColumnProps<T> extends ColumnProps<T> {
 
 export interface ITableProps<T> {
     dataSource: T[],
-    setDataSource: (data: T[]) => void,
+    setDataSource?: (data: T[]) => void,
     columns: IEditableColumnProps<T>[]
     showMessage?: (text: string, type: NoticeType) => void
 }
