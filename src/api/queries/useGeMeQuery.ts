@@ -29,9 +29,9 @@ export const user = {
     "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=2000",
   lastName: "LastName",
   phoneNumber: "+375441234567",
-  balance: 20.20,
+  balance: 20.2,
   role: EUserRole.CLIENT,
-}
+};
 
 const queryFn = async (): Promise<Required<IGetMeResults>> => {
   // const response = await request().get<IGetMeResults>("/me");
@@ -49,6 +49,10 @@ const queryFn = async (): Promise<Required<IGetMeResults>> => {
 };
 
 export const useGetMeQuery = ({ enabled }: IUseGetMeQueryProps) => {
-  const { data, isLoading, error } = useQuery<Required<IGetMeResults>, AxiosError>({ queryKey: ["me"], queryFn, enabled });
+  const { data, isLoading, error } = useQuery<
+    Required<IGetMeResults>,
+    AxiosError
+  >({ queryKey: ["me"], queryFn, enabled });
+
   return { data, isLoading: isLoading && enabled, error };
 };
