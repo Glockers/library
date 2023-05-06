@@ -25,6 +25,8 @@ const useCart = () => {
   });
   const { isLoading, add, remove } = useCartMutation();
 
+  const resetCart = () => setState((prev) => ({ ...prev, cartItems: [] }));
+
   const addItem = (bookId: string) => {
     if (isAuthorized) {
       return add(
@@ -111,6 +113,7 @@ const useCart = () => {
     hasInCart,
     addItem,
     removeItem,
+    resetCart,
   };
 };
 

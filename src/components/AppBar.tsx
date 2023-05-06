@@ -7,7 +7,9 @@ import {
   FileMarkdownFilled,
   ShopFilled,
   OrderedListOutlined,
-  MoneyCollectFilled
+  MoneyCollectFilled,
+  AlertTwoTone,
+  DeliveredProcedureOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 import type { MenuProps } from "antd";
@@ -17,7 +19,9 @@ import { useAuthContext } from "../providers";
 import logo from "../assets/pngtree-book.png";
 import { EUserRole } from "../api/mutations";
 
-type MenuItem = Required<MenuProps>["items"][number] & { permisson?: `${EUserRole}`[] };
+type MenuItem = Required<MenuProps>["items"][number] & {
+  permisson?: `${EUserRole}`[];
+};
 
 const { Header, Sider } = Layout;
 
@@ -47,7 +51,7 @@ export const AppBar = (): ReactElement => {
   const { isAuthorized, role } = useAuthContext();
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
-  console.log(role)
+
   const items = useMemo<MenuItem[]>(
     () => [
       {
@@ -91,11 +95,17 @@ export const AppBar = (): ReactElement => {
       ...withCondition(role === EUserRole.ADMIN, [
         {
           key: EAppRoutes.MANAGMENT_BOOK,
-          icon: <MoneyCollectFilled />,
+          icon: <AlertTwoTone />,
           label: "Управление книгами",
           onClick: () => navigate(EAppRoutes.MANAGMENT_BOOK),
         },
-      ])
+        {
+          key: EAppRoutes.ADMIN_ORDERS,
+          icon: <DeliveredProcedureOutlined />,
+          label: "Управление книгами",
+          onClick: () => navigate(EAppRoutes.ADMIN_ORDERS),
+        },
+      ]),
     ],
     [isAuthorized, navigate, role]
   );

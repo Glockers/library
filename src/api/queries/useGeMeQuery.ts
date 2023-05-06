@@ -29,7 +29,7 @@ export const user = {
     "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=2000",
   lastName: "LastName",
   phoneNumber: "+375441234567",
-  balance: 20.20,
+  balance: 2022.20,
   role: EUserRole.ADMIN,
 }
 
