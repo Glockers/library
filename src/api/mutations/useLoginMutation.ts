@@ -11,7 +11,6 @@ export interface ILoginResults {
   authToken: string;
   refreshToken: string;
   expiresIn: number; // ms
-  role: `${EUserRole}`;
 }
 
 export interface ILoginProps {
@@ -24,7 +23,6 @@ const mockData: ILoginResults = {
   authToken: 'string',
   refreshToken: 'string',
   expiresIn: 24 * 3600 * 1000, // ms
-  role: EUserRole.ADMIN,
 }
 
 const mutationFn = async (data: ILoginProps) => {

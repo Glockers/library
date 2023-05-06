@@ -21,7 +21,8 @@ const validation = z.object({
 
 const AppForm = styled.div`
   width: 100%;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
@@ -31,6 +32,7 @@ const AppForm = styled.div`
 
 const Wrapper = styled.div`
   height: 100%;
+  min-width: 420px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -75,7 +77,7 @@ export const AddCardForm = (): ReactElement => {
           <Form.Item
             label="Номер карты"
             name="number"
-            style={{ marginBottom: 2 }}
+            style={{ marginBottom: 2, width: '100%' }}
             validateStatus={!!formState.errors.number ? "error" : "validating"}
           >
             <Controller
@@ -83,6 +85,7 @@ export const AddCardForm = (): ReactElement => {
               control={control}
               render={({ field: { value, onChange } }) => (
                 <Input
+                width={'100%'}
                   placeholder="0000 0000 0000 0000"
                   onChange={onChange}
                   value={value}
@@ -93,7 +96,7 @@ export const AddCardForm = (): ReactElement => {
           <Form.Item
             label="Дата"
             name="expiry"
-            style={{ marginBottom: 2 }}
+            style={{ marginBottom: 2, width: '100%' }}
             validateStatus={!!formState.errors.expiry ? "error" : "validating"}
           >
             <Controller
@@ -107,7 +110,7 @@ export const AddCardForm = (): ReactElement => {
           <Form.Item
             label="Держатель карты"
             name="name"
-            style={{ marginBottom: 2 }}
+            style={{ marginBottom: 2, width: '100%' }}
             validateStatus={!!formState.errors.name ? "error" : "validating"}
           >
             <Controller
@@ -125,7 +128,7 @@ export const AddCardForm = (): ReactElement => {
           <Form.Item
             label="CVC"
             name="cvc"
-            style={{ marginBottom: 2 }}
+            style={{ marginBottom: 2, width: '100%' }}
             validateStatus={!!formState.errors.cvc ? "error" : "validating"}
           >
             <Controller

@@ -65,7 +65,7 @@ const useAuth = () => {
     localStorage.setItem(EStorageKeys.EXPIRES_IN, data.expiresIn.toString());
     localStorage.setItem(EStorageKeys.REFRESH_TOKEN, data.refreshToken);
     localStorage.setItem(EStorageKeys.TOKEN, data.authToken);
-    localStorage.setItem(EStorageKeys.ROLE, data.role);
+
     setState((prev) => ({ ...prev, isLoading: false, isAuthorized: true }));
     nav(EAppRoutes.HOME);
   };
@@ -96,6 +96,7 @@ const useAuth = () => {
 
   useEffect(() => {
     if (data) {
+      localStorage.setItem(EStorageKeys.ROLE, data.role);
       setState((prev) => ({
         ...prev,
         isAuthorized: true,

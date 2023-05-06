@@ -29,6 +29,7 @@ export const CreditCards = (): ReactElement => {
   return (
     <Wrapper>
       {isLoading && <Spin />}
+      {!data?.items.length && !isLoading && <span>У вас еще нет карт</span>}
       {data?.items.map(({ cvc, expiry, id, name, number }) => (
         <Wrapper
           style={{
