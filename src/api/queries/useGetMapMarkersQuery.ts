@@ -22,16 +22,28 @@ const queryFn = async (): Promise<IMapMarkersResults> => {
   // };
   return new Promise((res) => {
     setTimeout(() => {
-      res({ items: [{ latitude: 53.875161158318676, longitude: 27.609256390624985, id: "asdsadasd" }] });
+      res({
+        items: [
+          {
+            latitude: 53.875161158318676,
+            longitude: 27.609256390624985,
+            id: "asdsadasd",
+          },
+        ],
+      });
     }, 2000);
   });
 };
 
 export const useGetMapMarkersQuery = () => {
-  const { data, isLoading, error } = useQuery<
-    IMapMarkersResults,
-    AxiosError
-  >({ queryKey: ["/map"], queryFn });
+  const { data, isLoading, error } = useQuery<IMapMarkersResults, AxiosError>({
+    queryKey: ["/map"],
+    queryFn,
+    retry: false,
+    retryOnMount: false,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  });
 
   return { data, isLoading: isLoading, error };
 };

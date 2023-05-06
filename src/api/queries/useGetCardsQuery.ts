@@ -28,14 +28,14 @@ const items = [
     expiry: "11/23",
     name: faker.name.fullName(),
     cvc: faker.finance.creditCardCVV(),
-    id:  Math.random().toString(),
+    id: Math.random().toString(),
   },
   {
     number: "1234 5678 1234 5678",
     expiry: "11/23",
     name: faker.name.fullName(),
     cvc: faker.finance.creditCardCVV(),
-    id:  Math.random().toString(),
+    id: Math.random().toString(),
   },
 ];
 
@@ -58,7 +58,15 @@ export const useGetCardsQuery = ({ enabled }: IUseGetCartQueryProps) => {
   const { data, isLoading, error } = useQuery<
     Required<IGetCardsResults>,
     AxiosError
-  >({ queryKey: ["/payment/card"], queryFn, enabled });
+  >({
+    queryKey: ["/payment/card"],
+    queryFn,
+    enabled,
+    retry: false,
+    retryOnMount: false,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  });
 
   return { data, isLoading: isLoading && enabled, error };
 };
