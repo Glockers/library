@@ -6,4 +6,3 @@ export * from './Profile';
 export * from './Contacts';
 export * from './Cart';
 export * from './Payments';
-export * from './Admin';

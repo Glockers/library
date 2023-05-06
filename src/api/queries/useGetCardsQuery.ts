@@ -15,6 +15,30 @@ interface IUseGetCartQueryProps {
   enabled: boolean;
 }
 
+const items = [
+  {
+    number: "6375 5678 1234 5678",
+    expiry: "11/23",
+    name: faker.name.fullName(),
+    cvc: faker.finance.creditCardCVV(),
+    id: Math.random().toString(),
+  },
+  {
+    number: "6365 5347 1234 5678",
+    expiry: "11/23",
+    name: faker.name.fullName(),
+    cvc: faker.finance.creditCardCVV(),
+    id:  Math.random().toString(),
+  },
+  {
+    number: "1234 5678 1234 5678",
+    expiry: "11/23",
+    name: faker.name.fullName(),
+    cvc: faker.finance.creditCardCVV(),
+    id:  Math.random().toString(),
+  },
+];
+
 const queryFn = async (): Promise<IGetCardsResults> => {
   // const response = await request().get<IGetCardsResults>("/payment/card");
 
@@ -25,13 +49,7 @@ const queryFn = async (): Promise<IGetCardsResults> => {
   // };
   return new Promise((res) => {
     setTimeout(() => {
-      res({ items:[{
-        number: '6375 5678 1234 5678',
-        expiry: '11/23',
-        name: faker.name.fullName(),
-        cvc: parseInt(faker.finance.creditCardCVV()),
-        id: 'sad'
-      }] });
+      res({ items });
     }, 2000);
   });
 };
