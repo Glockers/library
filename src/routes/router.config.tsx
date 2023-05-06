@@ -1,6 +1,7 @@
 import { ReactElement } from "react";
 
 import { Home, Login, NotFound, Profile, SignUp, Contacts, Payments, Cart, Orders } from "../pages";
+import { CatalogManagment } from "../pages/Admin";
 
 export enum EPermission {
   AUTH_NO_AUTH = "no_auth",
@@ -18,6 +19,7 @@ export enum EAppRoutes {
   LOG_IN = "/login",
   PAYMENTS = "/payments",
   SIGN_UP = "/sign-up",
+  MANAGMENT_BOOK = "/manage-book",
 }
 
 export interface IRoute {
@@ -59,6 +61,10 @@ export const routes: TRoutes = {
   [EAppRoutes.SIGN_UP]: {
     element: <SignUp />,
     permissions: [EPermission.AUTH_NO_AUTH],
+  },
+  [EAppRoutes.MANAGMENT_BOOK]: {
+    element: <CatalogManagment />,
+    permissions: [EPermission.AUTH_ADMIN],
   },
   "*": {
     element: <NotFound />,

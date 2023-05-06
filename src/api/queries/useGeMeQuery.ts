@@ -30,7 +30,7 @@ export const user = {
   lastName: "LastName",
   phoneNumber: "+375441234567",
   balance: 20.20,
-  role: EUserRole.CLIENT,
+  role: EUserRole.ADMIN,
 }
 
 const queryFn = async (): Promise<Required<IGetMeResults>> => {

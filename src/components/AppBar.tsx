@@ -44,10 +44,10 @@ const withCondition = <T extends any[]>(condition: boolean, results: T) =>
   condition ? results : [];
 
 export const AppBar = (): ReactElement => {
-  const { isAuthorized } = useAuthContext();
+  const { isAuthorized, role } = useAuthContext();
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
-
+  console.log(role)
   const items = useMemo<MenuItem[]>(
     () => [
       {
@@ -88,8 +88,16 @@ export const AppBar = (): ReactElement => {
           onClick: () => navigate(EAppRoutes.PAYMENTS),
         },
       ]),
+      ...withCondition(role === EUserRole.ADMIN, [
+        {
+          key: EAppRoutes.MANAGMENT_BOOK,
+          icon: <MoneyCollectFilled />,
+          label: "Управление книгами",
+          onClick: () => navigate(EAppRoutes.MANAGMENT_BOOK),
+        },
+      ])
     ],
-    [isAuthorized, navigate]
+    [isAuthorized, navigate, role]
   );
 
   return (
