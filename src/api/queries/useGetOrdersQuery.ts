@@ -33,7 +33,7 @@ const queryFn = async (): Promise<IOrderResults> => {
       res({
         orders: Object.values(EOrderStatus).map((status) => ({
           id: Math.random().toString(),
-          items: books.splice(0, 5).map(({ id }) => ({ id, bookId: id })),
+          items: books.slice(0, 5).map(({ id }) => ({ id, bookId: id })),
           status,
         })),
       });

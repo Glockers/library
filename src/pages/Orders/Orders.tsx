@@ -8,11 +8,13 @@ import {
   List,
   Select,
   Spin,
+  Typography,
   Timeline,
 } from "antd";
 
 import { PageLayout } from "../../layouts";
 import {
+  EOrderStatus,
   ESortType,
   IUseGeBooksResults,
   useGetBooksQuery,
@@ -23,8 +25,7 @@ import { EAppRoutes } from "../../routes/router.config";
 import { useCartMutation } from "../../api/mutations";
 import { useCartContext } from "../../providers";
 
-const { Meta } = Card;
-
+const { Title } = Typography;
 const Container = styled(PageLayout)`
   display: block;
   width: 100%;
@@ -32,30 +33,19 @@ const Container = styled(PageLayout)`
   padding: 32px;
 `;
 
-const Wrapper = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 16px 32px;
-`;
-
-const BottonButtons = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 0 32px;
-`;
-
-const Amount = styled.p`
-  font-weight: 600;
-  margin: 0;
-`;
+const colors = {
+  [EOrderStatus.COMPLETED]: "#00ff6a",
+  [EOrderStatus.IN_PROGRESS]: "#0066ff",
+  [EOrderStatus.REJECTED]: "#ff0000",
+};
+const statuses = {
+  [EOrderStatus.COMPLETED]: "завершен",
+  [EOrderStatus.IN_PROGRESS]: "в обработке",
+  [EOrderStatus.REJECTED]: "отклонен",
+};
 
 export const Orders = (): ReactElement => {
-  const { hasInCart, removeItem, cartItems } = useCartContext();
-  const { data } = useGetBooksQuery({});
+  const { data, isLoading: isLoad } = useGetBooksQuery({});
   const { data: orders, isLoading } = useGetOrdersQuery();
   const items = useMemo(() => {
     return (
@@ -73,13 +63,38 @@ export const Orders = (): ReactElement => {
 
   return (
     <Container>
+      {(isLoading || isLoad) && <Spin size="large" />}
       <Timeline
-        items={items?.map(() => ({
+        style={{ width: "100%" }}
+        items={items?.map(({ id, items, status }) => ({
+          color: colors[status],
           children: (
-            <Card title="Card title" bordered={false} style={{ width: 300 }}>
-              <p>Card content</p>
-              <p>Card content</p>
-              <p>Card content</p>
+            <Card
+              title={`№${id.slice(-4)}, сумма: ${getAmount(items)} BYN, cтатус: ${
+                statuses[status]
+              }`}
+              bordered={false}
+              style={{ width: "100%" }}
+            >
+              <List
+                className="demo-loadmore-list"
+                itemLayout="horizontal"
+                dataSource={items}
+                renderItem={(item) => (
+                  <List.Item
+                    extra={<img width={120} alt="" src={item.image} />}
+                  >
+                    <List.Item.Meta
+                      title={
+                        <span>
+                          {item.name} {item.cost} BYN
+                        </span>
+                      }
+                      description={item.description}
+                    />
+                  </List.Item>
+                )}
+              />
             </Card>
           ),
         }))}

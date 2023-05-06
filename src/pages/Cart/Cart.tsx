@@ -56,7 +56,7 @@ export const Cart = (): ReactElement => {
   const pay = () => {};
 
   return (
-    <Container>
+    <Container style={{ justifyContent: "start" }}>
       <Wrapper>
         <List
           className="demo-loadmore-list"
@@ -86,7 +86,7 @@ export const Cart = (): ReactElement => {
           <Button type="primary" onClick={pay}>
             Оплатить
           </Button>
-          <Amount>Итого: {amount} BYN</Amount>
+          <Amount>Итого: {amount?.toFixed(2)} BYN</Amount>
         </BottonButtons>
       )}
     </Container>

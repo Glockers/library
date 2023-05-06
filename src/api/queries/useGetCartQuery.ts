@@ -25,7 +25,7 @@ const queryFn = async (): Promise<IGetCartResults> => {
   // };
   return new Promise((res) => {
     setTimeout(() => {
-      res({ items: books.splice(0, 5).map(({ id }) => ({ id, bookId: id })) });
+      res({ items: books.slice(0, 5).map(({ id }) => ({ id, bookId: id })) });
     }, 2000);
   });
 };

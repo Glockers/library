@@ -38,7 +38,7 @@ export const Payments = (): ReactElement => {
 
   return (
     <Container style={{ justifyContent: "start" }}>
-      <Tabs defaultActiveKey="1" items={items} />
+      <Tabs style={{width: '100%'}} defaultActiveKey="1" items={items} />
     </Container>
   );
 };
