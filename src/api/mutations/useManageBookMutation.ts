@@ -49,15 +49,14 @@ export const useManageBookMutation = () => {
                 "/public/books",
             ]);
 
-            // if (cachedData) {
-            //     // client.setQueriesData(["/public/books"], () => {
-            //     //     return {
-            //     //         ...cachedData,
-            //     //         items: [...cachedData.items, data],
-            //     //     };
-            //     // });
-            // }
-            console.log(cachedData)
+            cachedData.forEach(([queryKey, results]) => {
+                if (!results) return
+                client.setQueriesData(queryKey, () => {
+                    console.log(results)
+                    return [...results, data];
+                });
+            })
+
         },
     });
 

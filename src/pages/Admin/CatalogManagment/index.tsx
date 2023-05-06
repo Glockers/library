@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import { PageLayout } from "../../../layouts";
-import { TableBook } from "./components";
 import styled from "styled-components";
+import { TableBook } from "./components";
 
 const Container = styled(PageLayout)`
   display: block;
@@ -19,7 +19,6 @@ const Title = styled.h1`
 export const CatalogManagment = (): ReactElement => {
     return (
         <Container>
-
             <Title>Управление книгами</Title>
             <TableBook />
         </Container>
