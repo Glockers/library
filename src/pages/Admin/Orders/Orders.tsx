@@ -7,6 +7,7 @@ import {
   Input,
   List,
   Select,
+  Collapse,
   Spin,
   Typography,
   Timeline,
@@ -22,10 +23,15 @@ import {
 } from "../../../api/queries";
 import { useNavigate } from "react-router-dom";
 import { EAppRoutes } from "../../../routes/router.config";
-import { useCartMutation } from "../../../api/mutations";
+import {
+  useCartMutation,
+  useChangeOrderMutation,
+} from "../../../api/mutations";
 import { useCartContext } from "../../../providers";
 
 const { Title } = Typography;
+const { Panel } = Collapse;
+
 const Container = styled(PageLayout)`
   display: block;
   width: 100%;
@@ -47,6 +53,7 @@ const statuses = {
 export const AdminOrders = (): ReactElement => {
   const { data, isLoading: isLoad } = useGetBooksQuery({});
   const { data: orders, isLoading } = useGetOrdersQuery();
+  const { changeStatus } = useChangeOrderMutation();
   const items = useMemo(() => {
     return (
       data &&
@@ -66,36 +73,72 @@ export const AdminOrders = (): ReactElement => {
       {(isLoading || isLoad) && <Spin size="large" />}
       <Timeline
         style={{ width: "100%" }}
-        items={items?.map(({ id, items, status }) => ({
+        items={items?.map(({ id, items, status }, i) => ({
           color: colors[status],
           children: (
-            <Card
-              title={`№${id.slice(-4)}, сумма: ${getAmount(items)} BYN, cтатус: ${
-                statuses[status]
-              }`}
-              bordered={false}
-              style={{ width: "100%" }}
-            >
-              <List
-                className="demo-loadmore-list"
-                itemLayout="horizontal"
-                dataSource={items}
-                renderItem={(item) => (
-                  <List.Item
-                    extra={<img width={120} alt="" src={item.image} />}
+            <Collapse defaultActiveKey={i === 0 ? "1" : undefined}>
+              <Panel
+                key={"1"}
+                header={`№${id.slice(-4)}, сумма: ${getAmount(
+                  items
+                )} BYN, cтатус: ${statuses[status]}`}
+              >
+                <List
+                  className="demo-loadmore-list"
+                  itemLayout="horizontal"
+                  dataSource={items}
+                  style={{ marginBottom: 32 }}
+                  renderItem={(item) => (
+                    <List.Item
+                      extra={<img width={120} alt="" src={item.image} />}
+                    >
+                      <List.Item.Meta
+                        title={
+                          <span>
+                            {item.name} {item.cost} BYN
+                          </span>
+                        }
+                        description={item.description}
+                      />
+                    </List.Item>
+                  )}
+                />
+                {status === EOrderStatus.IN_PROGRESS && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      bottom: 8,
+                      display: "flex",
+                      gap: 8,
+                    }}
                   >
-                    <List.Item.Meta
-                      title={
-                        <span>
-                          {item.name} {item.cost} BYN
-                        </span>
+                    <Button
+                      onClick={() =>
+                        changeStatus({
+                          orderId: id,
+                          status: EOrderStatus.COMPLETED,
+                        })
                       }
-                      description={item.description}
-                    />
-                  </List.Item>
+                      type="primary"
+                    >
+                      Заказ доставлен
+                    </Button>
+                    <Button
+                      onClick={() =>
+                        changeStatus({
+                          orderId: id,
+                          status: EOrderStatus.REJECTED,
+                        })
+                      }
+                      danger={true}
+                      type="dashed"
+                    >
+                      Отменить заказ
+                    </Button>
+                  </div>
                 )}
-              />
-            </Card>
+              </Panel>
+            </Collapse>
           ),
         }))}
       />

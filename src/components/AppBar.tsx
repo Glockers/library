@@ -96,13 +96,13 @@ export const AppBar = (): ReactElement => {
         {
           key: EAppRoutes.MANAGMENT_BOOK,
           icon: <AlertTwoTone />,
-          label: "Управление книгами",
+          label: "Управ. книгами",
           onClick: () => navigate(EAppRoutes.MANAGMENT_BOOK),
         },
         {
           key: EAppRoutes.ADMIN_ORDERS,
           icon: <DeliveredProcedureOutlined />,
-          label: "Управление книгами",
+          label: "Управ. заказами",
           onClick: () => navigate(EAppRoutes.ADMIN_ORDERS),
         },
       ]),

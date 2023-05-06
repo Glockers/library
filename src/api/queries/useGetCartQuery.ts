@@ -34,7 +34,15 @@ export const useGetCartQuery = ({ enabled }: IUseGetCartQueryProps) => {
   const { data, isLoading, error } = useQuery<
     Required<IGetCartResults>,
     AxiosError
-  >({ queryKey: ["/cart"], queryFn, enabled });
+  >({
+    queryKey: ["/cart"],
+    queryFn,
+    enabled,
+    retry: false,
+    retryOnMount: false,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  });
 
   return { data, isLoading: isLoading && enabled, error };
 };

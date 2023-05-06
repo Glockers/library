@@ -87,6 +87,10 @@ export const useGetBooksQuery = (props: IUseGetMeQueryProps) => {
     {
       queryKey: ["/public/books", props],
       queryFn: () => queryFn(props),
+      retry: false,
+      retryOnMount: false,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
     }
   );
 
