@@ -18,13 +18,13 @@ const mockData: ICartResults = {
 };
 
 const mutationFnAdd = async (data: ICartProps) => {
-  // const response = await request().post<ICartResults>('/cart/item/add', data);
+  // const response = await request().post<ICartResults>('client/cart/item/add', data);
   // return response.data;
   return mockData;
 };
 
 const mutationFnRemove = async (data: ICartProps) => {
-  // const response = await request().post<ICartResults>('/cart/item/remove', data);
+  // const response = await request().post<ICartResults>('client/cart/item/remove', data);
   // return response.data;
   return mockData;
 };
@@ -35,7 +35,7 @@ export const useCartMutation = () => {
     AxiosError,
     ICartProps
   >({
-    mutationKey: ["/cart/item/add"],
+    mutationKey: ["client/cart/item/add"],
     mutationFn: mutationFnAdd,
   });
 
@@ -44,7 +44,7 @@ export const useCartMutation = () => {
     AxiosError,
     ICartProps
   >({
-    mutationKey: ["/cart/item/remove"],
+    mutationKey: ["client/cart/item/remove"],
     mutationFn: mutationFnRemove,
   });
 

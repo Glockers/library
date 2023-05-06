@@ -10,8 +10,9 @@ import {
 } from "../../api/queries";
 import { useNavigate } from "react-router-dom";
 import { EAppRoutes } from "../../routes/router.config";
-import { useCartMutation } from "../../api/mutations";
-import { useCartContext } from "../../providers";
+import { useCartMutation, usePayMutation } from "../../api/mutations";
+import { useAuthContext, useCartContext } from "../../providers";
+import { toast } from "react-toastify";
 
 const { Meta } = Card;
 
@@ -43,8 +44,11 @@ const Amount = styled.p`
 `;
 
 export const Cart = (): ReactElement => {
-  const { hasInCart, removeItem, cartItems } = useCartContext();
+  const { user, updateState } = useAuthContext();
+  const { hasInCart, removeItem, resetCart, cartItems } = useCartContext();
+  const { makePayment } = usePayMutation();
   const { data } = useGetBooksQuery({});
+
   const items = useMemo(() => {
     return data?.filter((el) => hasInCart(el.id));
   }, [data, cartItems]);
@@ -53,7 +57,29 @@ export const Cart = (): ReactElement => {
     return items?.reduce<number>((sum, el) => sum + el.cost, 0);
   }, [items]);
 
-  const pay = () => {};
+  const pay = () => {
+    if (!amount || !user) return;
+
+    if (amount > user.balance) {
+      return toast.error("На балансе недостаточно средст");
+    }
+
+    makePayment(
+      { items: cartItems },
+      {
+        onSuccess() {
+          toast.success("Оплата успешно произведена");
+          resetCart();
+          updateState((prev) => ({
+            ...prev,
+            user: prev.user
+              ? { ...prev.user, balance: prev.user.balance - amount }
+              : prev.user,
+          }));
+        },
+      }
+    );
+  };
 
   return (
     <Container style={{ justifyContent: "start" }}>

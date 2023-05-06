@@ -22,6 +22,14 @@ export interface IOrder {
   status: EOrderStatus;
 }
 
+const results = {
+  orders: Object.values(EOrderStatus).map((status) => ({
+    id: Math.random().toString(),
+    items: books.slice(0, 5).map(({ id }) => ({ id, bookId: id })),
+    status,
+  })),
+};
+
 const queryFn = async (): Promise<IOrderResults> => {
   // const response = await request().get<IOrderResults>("/client/orders");
 
@@ -30,13 +38,7 @@ const queryFn = async (): Promise<IOrderResults> => {
   // };
   return new Promise((res) => {
     setTimeout(() => {
-      res({
-        orders: Object.values(EOrderStatus).map((status) => ({
-          id: Math.random().toString(),
-          items: books.slice(0, 5).map(({ id }) => ({ id, bookId: id })),
-          status,
-        })),
-      });
+      res(results);
     }, 2000);
   });
 };
@@ -45,6 +47,10 @@ export const useGetOrdersQuery = () => {
   const { data, isLoading, error } = useQuery<IOrderResults, AxiosError>({
     queryKey: ["/client/orders"],
     queryFn,
+    retry: false,
+    retryOnMount: false,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 
   return { data, isLoading: isLoading, error };
