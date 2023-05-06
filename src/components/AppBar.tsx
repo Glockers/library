@@ -6,6 +6,7 @@ import {
   UserOutlined,
   FileMarkdownFilled,
   ShopFilled,
+  OrderedListOutlined,
   MoneyCollectFilled
 } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
@@ -39,17 +40,11 @@ const Logo = styled.img`
 // getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
 // getItem('Files', '9', <FileOutlined />),
 
-const withCondition = <T extends MenuItem[]>(condition: boolean, role: `${EUserRole}` | undefined, results: T) => {
-  return results.filter((element) => {
-    if (element?.permisson && role !== undefined && element.permisson.includes(role)) {
-      return results
-    }
-  })
-  // return condition ? results : [];
-}
+const withCondition = <T extends any[]>(condition: boolean, results: T) =>
+  condition ? results : [];
 
 export const AppBar = (): ReactElement => {
-  const { isAuthorized, role } = useAuthContext();
+  const { isAuthorized } = useAuthContext();
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
 
@@ -67,32 +62,34 @@ export const AppBar = (): ReactElement => {
         label: "Пункт выдачи",
         onClick: () => navigate(EAppRoutes.MAP),
       },
-      ...withCondition(isAuthorized, role, [
+      ...withCondition(isAuthorized, [
         {
           key: EAppRoutes.CART,
           icon: <ShopFilled />,
           label: "Корзина",
-          permisson: [EUserRole.ADMIN, EUserRole.CLIENT],
           onClick: () => navigate(EAppRoutes.CART),
+        },
+        {
+          key: EAppRoutes.ORDERS,
+          icon: <OrderedListOutlined />,
+          label: "Заказы",
+          onClick: () => navigate(EAppRoutes.ORDERS),
         },
         {
           key: EAppRoutes.PROFILE,
           icon: <UserOutlined />,
           label: "Профиль",
-          permisson: [EUserRole.ADMIN, EUserRole.CLIENT],
-
           onClick: () => navigate(EAppRoutes.PROFILE),
         },
         {
           key: EAppRoutes.PAYMENTS,
           icon: <MoneyCollectFilled />,
           label: "Оплата",
-          permisson: [EUserRole.CLIENT, EUserRole.ADMIN],
           onClick: () => navigate(EAppRoutes.PAYMENTS),
         },
       ]),
     ],
-    [isAuthorized]
+    [isAuthorized, navigate]
   );
 
   return (

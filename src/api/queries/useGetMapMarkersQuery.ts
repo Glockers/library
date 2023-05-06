@@ -15,12 +15,10 @@ export interface IMapMarkers {
 }
 
 const queryFn = async (): Promise<IMapMarkersResults> => {
-  // const response = await request().get<IGetCartResults>("/map");
+  // const response = await request().get<IMapMarkersResults>("/map");
 
   // return {
   //   ...response.data,
-  //   image: response.data.image || avatar,
-  //   phoneNumber: "",
   // };
   return new Promise((res) => {
     setTimeout(() => {
