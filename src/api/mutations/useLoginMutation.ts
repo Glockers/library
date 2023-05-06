@@ -24,7 +24,7 @@ const mockData: ILoginResults = {
   authToken: 'string',
   refreshToken: 'string',
   expiresIn: 24 * 3600 * 1000, // ms
-  role: EUserRole.CLIENT,
+  role: EUserRole.ADMIN,
 }
 
 const mutationFn = async (data: ILoginProps) => {
