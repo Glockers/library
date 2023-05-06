@@ -51,7 +51,6 @@ const TableFactory = <T extends { id: string }>(props: IPropsTableCRUD<T>) => {
             const newData: T[] = props.dataSource.filter((item: T) => item.id !== key);
             const element = props.dataSource.find((item: T) => item.id === key);
             if (element) {
-                props.setDataSource(newData);
                 await props.deleteHandler(element);
             }
         } catch (errInfo) {
@@ -67,7 +66,7 @@ const TableFactory = <T extends { id: string }>(props: IPropsTableCRUD<T>) => {
         setEditingKey('');
     };
 
-    useEffect(() => console.log(element), [element])
+    // useEffect(() => console.log(element), [element])
 
     const edit = (record: T) => {
         setLoading(true)
@@ -96,7 +95,7 @@ const TableFactory = <T extends { id: string }>(props: IPropsTableCRUD<T>) => {
                 newData.push(row);
             }
             setEditingKey('');
-            props.setDataSource(newData);
+            // props.setDataSource(newData);
             props.updateHandler(newData[index])
         } catch (errInfo) {
             console.error('Validate Failed:', errInfo);
@@ -175,6 +174,7 @@ const TableFactory = <T extends { id: string }>(props: IPropsTableCRUD<T>) => {
 
             <Form form={form} component={false}>
                 <Table
+                    scroll={{ x: 2000, y: 500 }}
                     bordered
                     dataSource={props.dataSource}
                     columns={mergedColumns}
