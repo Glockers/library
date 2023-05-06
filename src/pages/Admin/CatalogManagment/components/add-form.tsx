@@ -3,6 +3,7 @@ import { number, string, z } from "zod";
 import { IUseGeBooksResults } from "../../../../api/queries";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Form, Input, InputNumber } from "antd";
+import { IAddBookProps } from "../../../../api/mutations/useManageBookMutation";
 
 
 
@@ -28,22 +29,18 @@ const validation = z.object({
     author: authorValidation
 });
 
+interface IProps {
+    onAdd: (data: IAddBookProps) => void
+}
 
-
-export const AddForm = (
-
-) => {
+export const AddForm = ({ onAdd }: IProps) => {
 
     const { handleSubmit, control, formState } = useForm<TFormFields>({
         resolver: zodResolver(validation),
     });
 
-    const handle = (data: any) => {
-        console.log(data)
-    }
-
     return (
-        <Form onSubmitCapture={handle}>
+        <Form onSubmitCapture={handleSubmit(onAdd)}>
             <Form.Item
                 label="Название книги"
                 name="name"

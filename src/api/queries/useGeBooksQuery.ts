@@ -14,11 +14,11 @@ export interface IUseGeBooksResults {
   description: string;
   cost: number;
   id: string;
-  address: {
-    id: string;
-    addressLine1: string;
-    city: string;
-  };
+  // address: {
+  //   id: string;
+  //   addressLine1: string;
+  //   city: string;
+  // };
   author: {
     id: string;
     // ** Full name */

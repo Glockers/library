@@ -19,7 +19,6 @@ const Title = styled.h1`
 export const CatalogManagment = (): ReactElement => {
     return (
         <Container>
-
             <Title>Управление книгами</Title>
             <TableBook />
         </Container>
