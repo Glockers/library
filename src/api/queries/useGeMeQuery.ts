@@ -49,10 +49,6 @@ const queryFn = async (): Promise<Required<IGetMeResults>> => {
 };
 
 export const useGetMeQuery = ({ enabled }: IUseGetMeQueryProps) => {
-  const { data, isLoading, error } = useQuery<
-    Required<IGetMeResults>,
-    AxiosError
-  >({ queryKey: ["me"], queryFn, enabled });
-
+  const { data, isLoading, error } = useQuery<Required<IGetMeResults>, AxiosError>({ queryKey: ["me"], queryFn, enabled });
   return { data, isLoading: isLoading && enabled, error };
 };

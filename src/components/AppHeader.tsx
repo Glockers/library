@@ -10,7 +10,7 @@ import { useAuthContext } from "../providers";
 
 export const HEADER_HEIGHT = 60;
 
-const Container = styled(Header)<{ height: number }>`
+const Container = styled(Header) <{ height: number }>`
   position: sticky;
   top: 0;
   left: 0;
@@ -86,7 +86,7 @@ export const AppHeader = (): ReactElement => {
 
           {isAuthorized && (
             <>
-            <Mony>{user?.balance} BYN</Mony>
+              <Mony>{user?.balance} BYN</Mony>
               <Name>{user?.firstName}</Name>
               <Avatar
                 src={user?.image}

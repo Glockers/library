@@ -1,6 +1,6 @@
 import { ReactElement, useState } from "react";
 import styled from "styled-components";
-import { Avatar, Button, Card, Input, Select, Spin } from "antd";
+import { Avatar, Button, Card, Input, InputNumber, Select, Spin } from "antd";
 import Cards from "react-credit-cards-2";
 import { PageLayout } from "../../layouts";
 import {
@@ -14,6 +14,8 @@ import { useCartMutation, usePaymentCardMutation } from "../../api/mutations";
 import { useAuthContext } from "../../providers";
 import { useGetCardsQuery } from "../../api/queries/useGetCardsQuery";
 import "react-credit-cards-2/dist/es/styles-compiled.css";
+import { Controller, useForm } from "react-hook-form";
+import Form from "antd/es/form/Form";
 
 const { Meta } = Card;
 
@@ -32,12 +34,14 @@ export const Payments = (): ReactElement => {
   const { isAuthorized } = useAuthContext();
   const { data, isLoading } = useGetCardsQuery({ enabled: isAuthorized });
   const { isLoading: isCardLoading } = usePaymentCardMutation();
+  const { control, handleSubmit } = useForm()
 
-  const handleAdd = (bookId: string) => {};
-  const handleRemove = (bookId: string) => {};
+  const handleAdd = (bookId: string) => { };
+  const handleRemove = (bookId: string) => { };
 
   return (
     <Container>
+
       <h1>Ваши карты:</h1>
       <Wrapper>
         {isLoading && <Spin />}
@@ -51,6 +55,24 @@ export const Payments = (): ReactElement => {
           />
         ))}
       </Wrapper>
-    </Container>
+
+      <Form onSubmitCapture={handleSubmit((data) => console.log(data))}>
+        <Controller
+          name="count_money"
+          control={control}
+          render={({ field: { value, onChange } }) => (
+            <InputNumber
+              min={1}
+              max={100000000}
+              type="count_money"
+              placeholder="0"
+              onChange={onChange}
+              value={value}
+            />
+          )}
+        />
+        <Button htmlType="submit">Пополнить баланс</Button>
+      </Form>
+    </Container >
   );
 };

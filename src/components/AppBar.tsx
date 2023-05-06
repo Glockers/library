@@ -90,13 +90,6 @@ export const AppBar = (): ReactElement => {
           permisson: [EUserRole.CLIENT, EUserRole.ADMIN],
           onClick: () => navigate(EAppRoutes.PAYMENTS),
         },
-        {
-          key: EAppRoutes.PAYMENTS,
-          icon: <MoneyCollectFilled />,
-          label: "Оплата",
-          permisson: [EUserRole.CLIENT, EUserRole.ADMIN],
-          onClick: () => navigate(EAppRoutes.PAYMENTS),
-        },
       ]),
     ],
     [isAuthorized]
