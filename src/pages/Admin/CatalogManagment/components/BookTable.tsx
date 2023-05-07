@@ -5,6 +5,8 @@ import { IUseGeBooksResults, useGetBooksQuery } from "../../../../api/queries/us
 import TableFactory from "../../../../components/Table/table";
 import { AddForm } from "./AddForm";
 import { columns } from "./config";
+import { Button, Space } from "antd";
+import { CSVLink } from "react-csv";
 
 
 // type TEntity = IUseGeBooksResults;
@@ -21,6 +23,13 @@ export const TableBook = (): ReactElement => {
                     toast.success("Книга добавлена")
                 }
             })} />
+
+            <Space style={{ marginBottom: 16 }}>
+                <Button type="primary" >
+                    <CSVLink filename={"Книги"} data={data ? data : []}>Экспортировать</CSVLink>
+                </Button>
+            </Space>
+
             <TableFactory<any>
                 columns={columns}
                 deleteHandler={(data) => remove(data, {

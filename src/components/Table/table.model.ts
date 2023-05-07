@@ -25,7 +25,7 @@ export interface IEditableCellProps extends React.HTMLAttributes<HTMLElement> {
 
 
 export interface ICRUDOperation<T> {
-    saveHandler: (data: T) => void;
+    saveHandler?: (data: T) => void;
     updateHandler: (newData: T) => void;
     deleteHandler: (data: T) => void;
 }

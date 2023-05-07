@@ -44,21 +44,21 @@ const _mock: IGetMeResults[] = [
     },
 ]
 
-const queryFn = async (): Promise<IGetUserResults> => {
+const queryFn = async (): Promise<IGetMeResults[]> => {
 
     const data = _mock;
 
 
     return new Promise((res) => {
         setTimeout(() => {
-            res({ users: data });
+            res(data);
         }, 2000);
     });
 }
 
 export const useGetUsersQuery = () => {
 
-    const { data, isLoading, error } = useQuery<IGetUserResults, AxiosError>({
+    const { data, isLoading, error } = useQuery<IGetMeResults[], AxiosError>({
         queryKey: ["/client/clients"],
         queryFn,
         retry: false,
