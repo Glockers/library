@@ -2,7 +2,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import request, { IHttpError } from "../utils";
 import { AxiosError } from "axios";
 import { ICartProps } from "./useCartMutation";
-import { EOrderStatus, IOrder, IOrderResults } from "../queries";
+import {
+  EOrderStatus,
+  IGetCartResults,
+  IOrder,
+  IOrderResults,
+} from "../queries";
 
 export interface IPayResults extends IOrder {}
 
@@ -39,6 +44,13 @@ export const usePayMutation = () => {
             ...cachedData,
             orders: [data, ...cachedData.orders],
           };
+        });
+      }
+      const cart = client.getQueryData<IGetCartResults>(["/client/cart"]);
+
+      if (cart) {
+        client.setQueryData(["/client/cart"], () => {
+          return undefined;
         });
       }
     },

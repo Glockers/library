@@ -7,6 +7,7 @@ import { AxiosError } from "axios";
 import { books } from "./useGeBooksQuery";
 import { useEffect } from "react";
 import { addToStorage, getFromStorage } from "./storage.config";
+import dayjs from "dayjs";
 
 export enum EOrderStatus {
   IN_PROGRESS = "in_progress",
@@ -26,11 +27,13 @@ export interface IOrder {
 }
 
 const results = {
-  orders: Object.values(EOrderStatus).map((status) => ({
+  orders: Object.values(EOrderStatus).map((status, i) => ({
     id: Math.random().toString(),
-    items: books.slice(0, 5).map(({ id }) => ({ id, bookId: id })),
+    items: books
+      .slice(0, Math.round(Math.random() * 6))
+      .map(({ id }) => ({ id, bookId: id })),
     status,
-    createdAt: new Date(),
+    createdAt: dayjs().subtract(i, "day").toDate(),
   })),
 };
 

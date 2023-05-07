@@ -78,15 +78,15 @@ export const routes: TRoutes = {
   },
   [EAppRoutes.MANAGMENT_BOOK]: {
     element: <CatalogManagment />,
-    permissions: [EPermission.AUTH_ADMIN],
+    permissions: [EPermission.AUTH_ADMIN, EPermission.AUTH_REQUIRED],
   },
   [EAppRoutes.ADMIN_ORDERS]: {
     element: <AdminOrders />,
-    permissions: [EPermission.AUTH_ADMIN],
+    permissions: [EPermission.AUTH_ADMIN, EPermission.AUTH_REQUIRED],
   },
   [EAppRoutes.ADMIN_REPORTS]: {
     element: <AdminReports />,
-    permissions: [EPermission.AUTH_ADMIN],
+    permissions: [EPermission.AUTH_ADMIN, EPermission.AUTH_REQUIRED],
   },
   "*": {
     element: <NotFound />,

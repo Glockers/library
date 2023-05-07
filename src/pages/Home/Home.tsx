@@ -127,6 +127,7 @@ export const Home = (): ReactElement => {
       <Wrapper>
         {data?.map((book) => (
           <BookCard
+            key={book.id}
             book={book}
             isSelected={hasInCart(book.id)}
             onAdd={addItem}

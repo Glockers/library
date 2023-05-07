@@ -7,6 +7,7 @@ import {
   ESortType,
   IUseGeBooksResults,
   useGetBooksQuery,
+  useGetOrdersQuery,
 } from "../../api/queries";
 import { useNavigate } from "react-router-dom";
 import { EAppRoutes } from "../../routes/router.config";
@@ -45,6 +46,7 @@ const Amount = styled.p`
 
 export const Cart = (): ReactElement => {
   const { user, updateState } = useAuthContext();
+  const {isLoading: isOrdersLoading} = useGetOrdersQuery();
   const { hasInCart, removeItem, resetCart, cartItems, isLoading } =
     useCartContext();
   const { makePayment } = usePayMutation();
@@ -84,7 +86,7 @@ export const Cart = (): ReactElement => {
 
   return (
     <Container style={{ justifyContent: "start" }}>
-      {isLoading && <Spin size="large" />}
+      {(isLoading || isOrdersLoading) && <Spin size="large" />}
       <Wrapper>
         <List
           className="demo-loadmore-list"

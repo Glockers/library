@@ -1,59 +1,43 @@
-import { ReactElement, useMemo, useState } from "react";
+import { ReactElement, useMemo } from "react";
 import styled from "styled-components";
-import {
-  Avatar,
-  Button,
-  Card,
-  Input,
-  List,
-  Select,
-  Collapse,
-  Spin,
-  Typography,
-  Timeline,
-} from "antd";
+import { Card, Spin, Typography, Row, Col, Statistic } from "antd";
+import dayjs from "dayjs";
+import { Bar, Line } from "react-chartjs-2";
+import { ArrowUpOutlined } from "@ant-design/icons";
 
 import { PageLayout } from "../../../layouts";
-import {
-  EOrderStatus,
-  ESortType,
-  IUseGeBooksResults,
-  useGetBooksQuery,
-  useGetOrdersQuery,
-} from "../../../api/queries";
-import { useNavigate } from "react-router-dom";
-import { EAppRoutes } from "../../../routes/router.config";
-import {
-  useCartMutation,
-  useChangeOrderMutation,
-} from "../../../api/mutations";
-import { useCartContext } from "../../../providers";
+import { useGetBooksQuery, useGetOrdersQuery } from "../../../api/queries";
 
 const { Title } = Typography;
-const { Panel } = Collapse;
-
 const Container = styled(PageLayout)`
-  display: block;
   width: 100%;
-  min-width: 320px;
   padding: 32px;
+  justify-content: start;
 `;
 
-const colors = {
-  [EOrderStatus.COMPLETED]: "#00ff6a",
-  [EOrderStatus.IN_PROGRESS]: "#0066ff",
-  [EOrderStatus.REJECTED]: "#ff0000",
-};
-const statuses = {
-  [EOrderStatus.COMPLETED]: "завершен",
-  [EOrderStatus.IN_PROGRESS]: "в обработке",
-  [EOrderStatus.REJECTED]: "отклонен",
+const ChartWrapper = styled.div`
+  width: 100%;
+  max-width: 1020px;
+  margin-bottom: 16px;
+`;
+
+const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: "top" as const,
+    },
+    title: {
+      display: true,
+      text: "Ежедневные продажи",
+    },
+  },
 };
 
 export const AdminReports = (): ReactElement => {
   const { data, isLoading: isLoad } = useGetBooksQuery({});
   const { data: orders, isLoading } = useGetOrdersQuery();
-  const { changeStatus } = useChangeOrderMutation();
+
   const items = useMemo(() => {
     return (
       data &&
@@ -68,80 +52,140 @@ export const AdminReports = (): ReactElement => {
     return data.reduce((acc, num) => acc + num.cost, 0);
   };
 
+  const chartData = useMemo(() => {
+    const data: Record<string, number> = {};
+
+    items?.forEach((item) => {
+      const key = dayjs(item.createdAt).format("DD-MM-YYYY");
+      const value = data[key];
+
+      if (value) {
+        data[key] = value + getAmount(item.items);
+        return;
+      }
+      data[key] = getAmount(item.items);
+    });
+
+    return Object.entries(data)
+      .map(([x, y]) => ({ x, y }))
+      .sort(
+        (a, b) => dayjs(a.x).toDate().getTime() - dayjs(b.x).toDate().getTime()
+      );
+  }, [items]);
+
+  const chartBooksData = useMemo(() => {
+    const data: Record<string, number> = {};
+
+    items?.forEach((item) => {
+      item.items.forEach((book) => {
+        const key = book.name;
+        const value = data[key];
+
+        if (value) {
+          data[key] = value + 1;
+          return;
+        }
+        data[key] = 1;
+      });
+    });
+
+    return Object.entries(data)
+      .map(([y, x]) => ({ x, y }))
+      .sort((a, b) => b.x - a.x);
+  }, [items]);
+
+  const totalAmount = useMemo(
+    () => chartData.reduce((sum, curr) => sum + curr.y, 0),
+    [chartData]
+  );
+
+  const totalBooks = useMemo(
+    () => chartBooksData.reduce((sum, curr) => sum + curr.x, 0),
+    [chartBooksData]
+  );
+
+  if (isLoading || isLoad) {
+    return (
+      <Container>
+        <Spin size="large" />
+      </Container>
+    );
+  }
+
   return (
     <Container>
-      {(isLoading || isLoad) && <Spin size="large" />}
-      <Timeline
-        style={{ width: "100%" }}
-        items={items?.map(({ id, items, status }, i) => ({
-          color: colors[status],
-          children: (
-            <Collapse defaultActiveKey={i === 0 ? "1" : undefined}>
-              <Panel
-                key={"1"}
-                header={`№${id.slice(-4)}, сумма: ${getAmount(
-                  items
-                )} BYN, cтатус: ${statuses[status]}`}
-              >
-                <List
-                  className="demo-loadmore-list"
-                  itemLayout="horizontal"
-                  dataSource={items}
-                  style={{ marginBottom: 32 }}
-                  renderItem={(item) => (
-                    <List.Item
-                      extra={<img width={120} alt="" src={item.image} />}
-                    >
-                      <List.Item.Meta
-                        title={
-                          <span>
-                            {item.name} {item.cost} BYN
-                          </span>
-                        }
-                        description={item.description}
-                      />
-                    </List.Item>
-                  )}
-                />
-                {status === EOrderStatus.IN_PROGRESS && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      bottom: 8,
-                      display: "flex",
-                      gap: 8,
-                    }}
-                  >
-                    <Button
-                      onClick={() =>
-                        changeStatus({
-                          orderId: id,
-                          status: EOrderStatus.COMPLETED,
-                        })
-                      }
-                      type="primary"
-                    >
-                      Заказ доставлен
-                    </Button>
-                    <Button
-                      onClick={() =>
-                        changeStatus({
-                          orderId: id,
-                          status: EOrderStatus.REJECTED,
-                        })
-                      }
-                      danger={true}
-                      type="dashed"
-                    >
-                      Отменить заказ
-                    </Button>
-                  </div>
-                )}
-              </Panel>
-            </Collapse>
-          ),
-        }))}
-      />
+      <ChartWrapper>
+        <Title>Ежедневный заработок</Title>
+        <Line
+          options={{
+            ...options,
+            scales: {
+              y: {
+                ticks: {
+                  callback(tickValue, index, ticks) {
+                    return tickValue + " BYN";
+                  },
+                },
+              },
+            },
+          }}
+          data={{
+            datasets: [
+              {
+                data: chartData,
+                label: "Сумма",
+                borderColor: "#3496d8",
+                backgroundColor: "#70b9e9",
+              },
+            ],
+          }}
+        />
+      </ChartWrapper>
+      <ChartWrapper>
+        <Title>Популярность книг</Title>
+        <Bar
+          options={{
+            ...options,
+            indexAxis: "y" as const,
+          }}
+          data={{
+            datasets: [
+              {
+                data: chartBooksData,
+                label: "Купили раз",
+                borderColor: "#3496d8",
+                backgroundColor: "#70b9e9",
+              },
+            ],
+          }}
+        />
+      </ChartWrapper>
+      <Row gutter={16} style={{ width: "100%" }}>
+        <Col span={8}>
+          <Card bordered={false}>
+            <Statistic
+              title="Всего заработано"
+              value={totalAmount}
+              precision={2}
+              valueStyle={{ color: "#3f8600" }}
+              prefix={<ArrowUpOutlined />}
+              suffix="BYN"
+            />
+          </Card>
+        </Col>
+        <Col span={8}>
+          <Card bordered={false}>
+            <Statistic
+              title="Продано книг"
+              value={totalBooks}
+              precision={2}
+              valueStyle={{ color: "#3f8600" }}
+              prefix={<ArrowUpOutlined />}
+              suffix="кол."
+            />
+          </Card>
+        </Col>
+      </Row>
     </Container>
   );
 };
