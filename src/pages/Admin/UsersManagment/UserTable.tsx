@@ -4,16 +4,16 @@ import { useUsersdMutation } from "../../../api/mutations/useUsersMutation";
 import TableFactory from "../../../components/Table/table";
 import { columns } from "./config";
 import { toast } from "react-toastify";
-import { Button, Space } from "antd";
+import { Button, Space, Spin } from "antd";
 import { CSVLink } from "react-csv";
 
 export const UsersTable = (): ReactElement => {
 
-    const { data } = useGetUsersQuery()
+    const { data, isLoading } = useGetUsersQuery()
     const { remove, update } = useUsersdMutation();
-
     return (
         <>
+            {(isLoading) && <Spin size="large" />}
             <Space style={{ marginBottom: 16 }}>
                 <Button type="primary" >
                     <CSVLink filename={"Пользователи"} data={data ? data : []}>Экспортировать</CSVLink>
