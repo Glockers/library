@@ -11,6 +11,7 @@ import {
   AlertTwoTone,
   DeliveredProcedureOutlined,
   BankFilled,
+  UserSwitchOutlined
 } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 import type { MenuProps } from "antd";
@@ -111,6 +112,12 @@ export const AppBar = (): ReactElement => {
           icon: <BankFilled />,
           label: "Отчеты",
           onClick: () => navigate(EAppRoutes.ADMIN_REPORTS),
+        },
+        {
+          key: EAppRoutes.MANAGMENT_USERS,
+          icon: <UserSwitchOutlined />,
+          label: "Пользователи",
+          onClick: () => navigate(EAppRoutes.MANAGMENT_USERS),
         },
       ]),
     ],
