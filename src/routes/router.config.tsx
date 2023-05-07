@@ -13,6 +13,7 @@ import {
   Payments,
   Profile,
   SignUp,
+  Users,
 } from "../pages";
 
 export enum EPermission {
@@ -34,6 +35,7 @@ export enum EAppRoutes {
   MANAGMENT_BOOK = "/manage-book",
   ADMIN_ORDERS = "/admin/orders",
   ADMIN_REPORTS = "/admin/reports",
+  MANAGMENT_USERS = "/admin/users"
 }
 
 export interface IRoute {
@@ -86,6 +88,10 @@ export const routes: TRoutes = {
   },
   [EAppRoutes.ADMIN_REPORTS]: {
     element: <AdminReports />,
+    permissions: [EPermission.AUTH_ADMIN],
+  },
+  [EAppRoutes.MANAGMENT_USERS]: {
+    element: <Users />,
     permissions: [EPermission.AUTH_ADMIN],
   },
   "*": {
