@@ -44,7 +44,7 @@ export const TopUpForm = (): ReactElement => {
                 }
               : prev.user,
           }));
-          toast.success("Вы пополнили баланс");
+          // toast.success("Вы пополнили баланс");
           reset({ balance: undefined });
         },
       });

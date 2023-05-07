@@ -44,7 +44,7 @@ const queryFn = async ({
   search,
   sort,
 }: IUseGetMeQueryProps): Promise<IUseGeBooksResults[]> => {
-  // const response = await request().get<IUseGeBooksResults[]>("/public/books", {
+  // const response = await request().get<IUseGeBooksResults[]>("/api/catalog/getAll", {
   //   params: { search },
   // });
 

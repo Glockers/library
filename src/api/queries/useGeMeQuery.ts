@@ -39,7 +39,7 @@ const queryFn = async (): Promise<Required<IGetMeResults>> => {
 
   const response = await request().get<IGetMeResults>(`/api/user/me/${user.id}`);
   addToStorage("my", response.data)
-  console.log("response: ", response.data)
+  // console.log("response: ", response.data)
   // console.log(localStorage.getItem("role"))
   // return {
   //   ...response.data,

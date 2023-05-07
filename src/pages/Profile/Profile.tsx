@@ -40,9 +40,9 @@ export const Profile = (): ReactElement => {
           ...prev,
           user: prev.user
             ? {
-                ...prev.user,
-                ...data,
-              }
+              ...prev.user,
+              ...data,
+            }
             : undefined,
         }));
         toast.success("Вы успешно обновили данные");
@@ -160,15 +160,15 @@ export const Profile = (): ReactElement => {
         </Form.Item>
 
         <Form.Item>
-          <Button
+          {/* <Button
             htmlType="submit"
             style={{ marginTop: "16px" }}
             disabled={isLoading}
             type="primary"
           >
             Сохранить
-          </Button>
-          <Button
+          </Button> */}
+          {/* <Button
             htmlType="button"
             danger={true}
             style={{ marginTop: "16px", marginLeft: 12 }}
@@ -177,7 +177,7 @@ export const Profile = (): ReactElement => {
             type="primary"
           >
             Удалить аккаунт
-          </Button>
+          </Button> */}
         </Form.Item>
       </S.LoginForm>
     </PageLayout>

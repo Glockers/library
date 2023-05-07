@@ -3,6 +3,7 @@ import { IGetMeResults } from './../queries/useGeMeQuery';
 import { AxiosError } from 'axios';
 import { EUserRole } from './useLoginMutation';
 import { IGetUserResults } from '../queries/useGetUsersQuery';
+import request from '../utils';
 export type TDeleteUserProps = {
     id: string;
 }
@@ -26,14 +27,15 @@ export type TDeleteUserResults = {
 }
 
 const mutationFnRemove = async (data: TDeleteUserProps): Promise<TDeleteUserResults> => {
-    // const response = await request().post<IPaymentCardResults>('/payment/card/remove', data);
-    // return response.data;
+    const response = await request().post<IGetMeResults>('/api/user/deleteUser', data);
+    return { userId: response.data.id };
     // return mockData;
-    return { userId: data.id };
+    // return { userId: data.id };
 };
 
 const mutationFnUpdate = async (data: IGetMeResults): Promise<IGetMeResults> => {
-    // const response = await request().post<IPaymentCardResults>('/payment/card/remove', data);
+    console.log(data)
+    const response = await request().put<IGetMeResults>('/api/user/updateUser', data);
     // return response.data;
     return { ...data };
 }

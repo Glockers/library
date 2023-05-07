@@ -41,12 +41,7 @@ export const columns: IEditableColumnProps<IGetMeResults>[] = [
     editable: true,
   },
   {
-    title: "Баланс",
-    dataIndex: "phoneNumber",
-    editable: true,
-  },
-  {
-    title: "Баланс",
+    title: "Роль",
     dataIndex: "role",
     editable: true,
   },
