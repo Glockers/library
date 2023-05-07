@@ -1,7 +1,19 @@
 import { ReactElement } from "react";
 
-import { Home, Login, NotFound, Profile, SignUp, Contacts, Payments, Cart, Orders } from "../pages";
-import { AdminOrders, CatalogManagment } from "../pages/Admin";
+import {
+  AdminOrders,
+  AdminReports,
+  Cart,
+  CatalogManagment,
+  Contacts,
+  Home,
+  Login,
+  NotFound,
+  Orders,
+  Payments,
+  Profile,
+  SignUp,
+} from "../pages";
 
 export enum EPermission {
   AUTH_NO_AUTH = "no_auth",
@@ -12,15 +24,16 @@ export enum EPermission {
 export enum EAppRoutes {
   HOME = "/",
   PROFILE = "/profile",
-  CART = '/cart',
-  ORDERS = '/orders',
-  MAP = '/map',
-  AUTHOR = '/author/:authorId',
+  CART = "/cart",
+  ORDERS = "/orders",
+  MAP = "/map",
+  AUTHOR = "/author/:authorId",
   LOG_IN = "/login",
   PAYMENTS = "/payments",
   SIGN_UP = "/sign-up",
   MANAGMENT_BOOK = "/manage-book",
-  ADMIN_ORDERS = "/admin/orders"
+  ADMIN_ORDERS = "/admin/orders",
+  ADMIN_REPORTS = "/admin/reports",
 }
 
 export interface IRoute {
@@ -69,6 +82,10 @@ export const routes: TRoutes = {
   },
   [EAppRoutes.ADMIN_ORDERS]: {
     element: <AdminOrders />,
+    permissions: [EPermission.AUTH_ADMIN],
+  },
+  [EAppRoutes.ADMIN_REPORTS]: {
+    element: <AdminReports />,
     permissions: [EPermission.AUTH_ADMIN],
   },
   "*": {

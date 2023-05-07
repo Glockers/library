@@ -22,7 +22,6 @@ const Container = styled(PageLayout)`
   display: block;
   width: 100%;
   padding: 16px;
-  height: fit-content;
 `;
 
 const Wrapper = styled.div`

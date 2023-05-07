@@ -10,6 +10,7 @@ import {
   MoneyCollectFilled,
   AlertTwoTone,
   DeliveredProcedureOutlined,
+  BankFilled,
 } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 import type { MenuProps } from "antd";
@@ -104,6 +105,12 @@ export const AppBar = (): ReactElement => {
           icon: <DeliveredProcedureOutlined />,
           label: "Управ. заказами",
           onClick: () => navigate(EAppRoutes.ADMIN_ORDERS),
+        },
+        {
+          key: EAppRoutes.ADMIN_REPORTS,
+          icon: <BankFilled />,
+          label: "Отчеты",
+          onClick: () => navigate(EAppRoutes.ADMIN_REPORTS),
         },
       ]),
     ],

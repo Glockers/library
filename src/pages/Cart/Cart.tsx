@@ -45,7 +45,8 @@ const Amount = styled.p`
 
 export const Cart = (): ReactElement => {
   const { user, updateState } = useAuthContext();
-  const { hasInCart, removeItem, resetCart, cartItems } = useCartContext();
+  const { hasInCart, removeItem, resetCart, cartItems, isLoading } =
+    useCartContext();
   const { makePayment } = usePayMutation();
   const { data } = useGetBooksQuery({});
 
@@ -83,6 +84,7 @@ export const Cart = (): ReactElement => {
 
   return (
     <Container style={{ justifyContent: "start" }}>
+      {isLoading && <Spin size="large" />}
       <Wrapper>
         <List
           className="demo-loadmore-list"
