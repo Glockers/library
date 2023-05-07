@@ -1,4 +1,4 @@
-export type TStargeKey = "map" | "orders" | "cards" | "myCart";
+export type TStargeKey = "map" | "orders" | "cards" | "myCart" | "my";
 
 export const addToStorage = <T>(key: TStargeKey, data: T) => {
   localStorage.setItem(key, JSON.stringify(data));

@@ -62,7 +62,7 @@ const useAuth = () => {
 
   const setLoginData = (data: ILoginResults): void => {
     setState((prev) => ({ ...prev, isLoading: true, ...data }));
-    localStorage.setItem(EStorageKeys.EXPIRES_IN, data.expiresIn.toString());
+    // localStorage.setItem(EStorageKeys.EXPIRES_IN, data.expiresIn.toString());
     localStorage.setItem(EStorageKeys.REFRESH_TOKEN, data.refreshToken);
     localStorage.setItem(EStorageKeys.TOKEN, data.authToken);
 
@@ -87,10 +87,12 @@ const useAuth = () => {
 
   const logout = (): void => {
     setState((prev) => ({ ...prev, isLoading: true }));
-    localStorage.removeItem(EStorageKeys.EXPIRES_IN);
+    // localStorage.removeItem(EStorageKeys.EXPIRES_IN);
     localStorage.removeItem(EStorageKeys.REFRESH_TOKEN);
     localStorage.removeItem(EStorageKeys.TOKEN);
     localStorage.removeItem(EStorageKeys.ROLE);
+    localStorage.removeItem("my");
+
     setState(() => ({ isAuthorized: false, isLoading: false }));
   };
 

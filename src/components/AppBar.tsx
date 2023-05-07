@@ -53,7 +53,7 @@ export const AppBar = (): ReactElement => {
   const { isAuthorized, role } = useAuthContext();
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
-
+  // console.log(role)
   const items = useMemo<MenuItem[]>(
     () => [
       {

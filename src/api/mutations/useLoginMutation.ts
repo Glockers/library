@@ -1,6 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import request, { IHttpError } from "../utils";
 import { AxiosError } from "axios";
+import { addToStorage } from "../queries/storage.config";
+import { IGetMeResults } from "../queries";
 
 export enum EUserRole {
   CLIENT = "client",
@@ -11,6 +13,7 @@ export interface ILoginResults {
   authToken: string;
   refreshToken: string;
   expiresIn: number; // ms
+  user: IGetMeResults;
 }
 
 export interface ILoginProps {
@@ -19,16 +22,17 @@ export interface ILoginProps {
 }
 
 // TODO remove AFTER ADD BACKEND
-const mockData: ILoginResults = {
-  authToken: 'string',
-  refreshToken: 'string',
-  expiresIn: 24 * 3600 * 1000, // ms
-}
+// const mockData: ILoginResults = {
+//   authToken: 'string',
+//   refreshToken: 'string',
+//   expiresIn: 24 * 3600 * 1000, // ms
+// }
 
 const mutationFn = async (data: ILoginProps) => {
-  // const response = await request().post<ILoginResults>("/auth/login", data);
-  // return response.data;
-  return mockData;
+  const response = await request().post<ILoginResults>("/api/auth/login", data);
+  addToStorage("my", response.data.user);
+  return response.data;
+  // return mockData;
 };
 
 export const useLoginMutation = () => {

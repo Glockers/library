@@ -20,14 +20,14 @@ const mockData: ISignUpResults = {
 };
 
 const mutationFn = async (data: ISignUpProps) => {
-  // const response = await request().post<ISignUpResults>("/auth/signup", data);
-  // return response.data;
-  return mockData;
+  const response = await request().post<ISignUpResults>("/api/auth/register", data);
+  return response.data;
+  // return mockData;
 };
 
 export const useSignUpMutation = () => {
   const { data, mutate, isLoading, error } = useMutation<
-  ISignUpResults,
+    ISignUpResults,
     AxiosError,
     ISignUpProps
   >({
